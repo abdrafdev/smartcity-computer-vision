@@ -1,0 +1,178 @@
+version: '3.8'
+
+services:
+  # Smart City Computer Vision Application
+  smartcity-cv:
+    build: .
+    container_name: smartcity-computer-vision
+    restart: unless-stopped
+    
+    # Environment variables
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+      - DISPLAY=${DISPLAY:-:0}
+    
+    # Volume mappings
+    volumes:
+      - ./models:/app/models
+      - ./dataset:/app/dataset
+      - ./outputs:/app/outputs
+      - ./logs:/app/logs
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    
+    # Port mappings (for future web interface)
+    ports:
+      - "8080:8080"
+      - "5000:5000"
+    
+    # Network configuration
+    networks:
+      - smartcity-network
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import ultralytics; print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    
+    # GPU support (uncomment if NVIDIA GPU available)
+    # runtime: nvidia
+    # environment:
+    #   - NVIDIA_VISIBLE_DEVICES=all
+    
+    # Command override examples
+    # command: python demo.py --model traffic --source 0
+    # command: python traffic_train.py
+    # command: python evaluate.py --model all --benchmark --compare
+
+  # Optional: Database service for storing results
+  database:
+    image: postgres:14
+    container_name: smartcity-database
+    restart: unless-stopped
+    
+    environment:
+      - POSTGRES_DB=smartcity
+      - POSTGRES_USER=smartcity_user
+      - POSTGRES_PASSWORD=smartcity_pass
+    
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    
+    ports:
+      - "5432:5432"
+    
+    networks:
+      - smartcity-network
+    
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+
+  # Optional: Redis for caching and session management
+  cache:
+    image: redis:7-alpine
+    container_name: smartcity-cache
+    restart: unless-stopped
+    
+    ports:
+      - "6379:6379"
+    
+    volumes:
+      - redis_data:/data
+    
+    networks:
+      - smartcity-network
+    
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.2'
+
+  # Optional: Monitoring with Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: smartcity-prometheus
+    restart: unless-stopped
+    
+    ports:
+      - "9090:9090"
+    
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    
+    networks:
+      - smartcity-network
+    
+    profiles:
+      - monitoring
+
+  # Optional: Grafana for visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: smartcity-grafana
+    restart: unless-stopped
+    
+    ports:
+      - "3000:3000"
+    
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    
+    networks:
+      - smartcity-network
+    
+    profiles:
+      - monitoring
+    
+    depends_on:
+      - prometheus
+
+# Network configuration
+networks:
+  smartcity-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# Volume definitions
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
