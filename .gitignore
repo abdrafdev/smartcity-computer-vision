@@ -1,0 +1,154 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# YOLO specific
+runs/
+*.pt
+*.onnx
+*.engine
+*.torchscript
+*.tflite
+*.pb
+
+# Dataset cache files
+*.cache
+
+# Model outputs
+models/*/runs/
+models/*/weights/
+models/*/results/
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Large dataset files (keep structure, ignore large files)
+dataset/*/train/images/*
+dataset/*/valid/images/*
+dataset/*/test/images/*
+dataset/*/train/labels/*
+dataset/*/valid/labels/*
+dataset/*/test/labels/*
+
+# But keep some sample files
+!dataset/*/train/images/.gitkeep
+!dataset/*/valid/images/.gitkeep
+!dataset/*/test/images/.gitkeep
+!dataset/*/train/labels/.gitkeep
+!dataset/*/valid/labels/.gitkeep
+!dataset/*/test/labels/.gitkeep
+
+# Training outputs
+wandb/
