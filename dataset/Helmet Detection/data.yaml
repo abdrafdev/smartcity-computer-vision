@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['helmets']
+
+roboflow:
+  workspace: abdul-rafay-vux71
+  project: helmet-detection-1gslh-pdjd8
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/abdul-rafay-vux71/helmet-detection-1gslh-pdjd8/dataset/1

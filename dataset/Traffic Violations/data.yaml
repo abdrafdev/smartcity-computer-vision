@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 24
+names: ['10', '11', '12', '13', '13 0 0 0 0', '14', '15', '16', '17', '18', '19', '20', '20 0 0 0 0', '22', '220', '2225', '224', '225', '23', '2323', '23230', '24', '25', '4 0 0 0 0']
+
+roboflow:
+  workspace: abdul-rafay-vux71
+  project: traffic-violations-z7fcf-ctywj
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/abdul-rafay-vux71/traffic-violations-z7fcf-ctywj/dataset/1
