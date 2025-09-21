@@ -121,10 +121,16 @@ models/*/results/
 logs/
 
 # IDE
-.vscode/
 .idea/
 *.swp
 *.swo
+
+# VS Code (allow workspace settings)
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/*.code-workspace
+!.vscode/settings.json
+!.vscode/extensions.json
 
 # OS
 .DS_Store
